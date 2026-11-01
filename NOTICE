@@ -1,0 +1,29 @@
+YouTube Enhance (Self-Hosted)
+Copyright 2026 the repository owner
+
+Derived from Maasea/sgmodule:
+  Script/Youtube/youtube.response.js  (build 2026/7/19)
+  Script/Youtube/youtube.request.js   (build 2026/7/12)
+  Copyright Maasea
+  Licensed under the Apache License, Version 2.0
+  https://github.com/Maasea/sgmodule
+
+Modifications:
+  - response script: ad-detection caches bounded to 64 entries, optional
+    background-play patch (enableBackgroundPlay), provenance header; the
+    onesie key cache is retained because the UMP flow requires it;
+  - request script: log_event dispatch disabled, only initplayback is handled,
+    provenance header;
+  - module rewritten: https-only patterns, bounded body buffering, no
+    log_event interception.
+
+Third-party service:
+  UMP ad stripping redirects the playback init request to
+  https://init-stream.maasea.workers.dev/ (operated by the upstream author),
+  passing the client key and the signed media URL. That service is not part of
+  this repository; it is required for UMP ad removal and is a third-party
+  dependency. The log_event header rewriting from upstream is disabled.
+
+Caption translation naming follows the upstream credit to @VirgilClyne.
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).

@@ -1,0 +1,11 @@
+#!name=YouTube Enhance (Self-Hosted)
+#!desc=脚本自托管：去广告（UMP 经作者 Worker）、后台播放、画中画、字幕翻译。
+#!arguments=屏蔽上传按钮:true,屏蔽选段按钮:true,屏蔽Shorts按钮:false,字幕翻译语言:off,启用后台播放:true
+#!arguments-desc=- 屏蔽参数：[true, false] \n- 翻译参数：[语言代码, off] \n- 启用后台播放：关闭后不再伪造 backgroundPlayerRender 能力位（画中画仍保留）\n\n1. 语言代码遵循 Google Translate Language Codes，off 表示关闭翻译\n2. UMP 广告通过作者托管的 Worker 处理，播放初始化请求会重定向到 init-stream.maasea.workers.dev
+
+[Script]
+youtube.response = type=http-response,pattern=^https:\/\/youtubei\.googleapis\.com\/(youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch|config))(\?(.*))?$,requires-body=true,max-size=10485760,binary-body-mode=true,script-path=https://raw.githubusercontent.com/jr7chysd/youtube-enhance/main/Script/youtube.response.js,argument="{"captionLang":"{{{字幕翻译语言}}}","blockUpload":{{{屏蔽上传按钮}}},"blockImmersive":{{{屏蔽选段按钮}}},"blockShorts":{{{屏蔽Shorts按钮}}},"enableBackgroundPlay":{{{启用后台播放}}}}"
+youtube.request.init = type=http-request,pattern=^https:\/\/[\w-]+\.googlevideo\.com\/initplayback.+&ack.*,requires-body=true,max-size=1048576,binary-body-mode=true,script-path=https://raw.githubusercontent.com/jr7chysd/youtube-enhance/main/Script/youtube.request.js,argument="{"captionLang":"{{{字幕翻译语言}}}"}"
+
+[MITM]
+hostname = %APPEND% *.googlevideo.com, youtubei.googleapis.com
